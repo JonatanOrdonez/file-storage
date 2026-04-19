@@ -13,7 +13,6 @@ export const uploadImageService = async (
     .upload(uniqueName, file.buffer, { contentType: file.mimetype });
 
   if (error) {
-    console.log("Supabase upload error:", error);
     throw Boom.badRequest(error.message);
   }
 

@@ -1,7 +1,10 @@
+import { useState } from "preact/hooks";
 import { useImages, STORAGE_URL } from "../providers/ImagesProvider";
+import type { StorageImage } from "../types";
 
 export const ImageGrid = () => {
   const { images, loading } = useImages();
+  const [preview, setPreview] = useState<StorageImage | null>(null);
 
   if (loading) {
     return (
@@ -42,32 +45,57 @@ export const ImageGrid = () => {
   }
 
   return (
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {images.map((image) => (
+    <>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {images.map((image) => (
+          <div
+            key={image.id}
+            class="rounded-xl overflow-hidden animate-fade-in cursor-pointer"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+            onMouseEnter={() => setPreview(image)}
+            onMouseLeave={() => setPreview(null)}
+          >
+            <img
+              src={`${STORAGE_URL}/${image.path}`}
+              alt={image.name}
+              class="w-full aspect-square object-cover"
+              loading="lazy"
+            />
+            <div class="px-3 py-2">
+              <p
+                class="text-xs truncate"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                {image.name}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {preview && (
         <div
-          key={image.id}
-          class="rounded-xl overflow-hidden animate-fade-in"
-          style={{
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-          }}
+          class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+          style={{ background: "rgba(0, 0, 0, 0.7)" }}
         >
-          <img
-            src={`${STORAGE_URL}/${image.path}`}
-            alt={image.name}
-            class="w-full aspect-square object-cover"
-            loading="lazy"
-          />
-          <div class="px-3 py-2">
+          <div class="max-w-[90vw] max-h-[90vh] flex flex-col items-center gap-3">
+            <img
+              src={`${STORAGE_URL}/${preview.path}`}
+              alt={preview.name}
+              class="max-w-full max-h-[85vh] object-contain rounded-xl"
+            />
             <p
-              class="text-xs truncate"
-              style={{ color: "var(--color-text-secondary)" }}
+              class="text-sm font-medium"
+              style={{ color: "white" }}
             >
-              {image.name}
+              {preview.name}
             </p>
           </div>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 };
