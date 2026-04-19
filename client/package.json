@@ -1,0 +1,26 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "browser-image-compression": "^2.0.2",
+    "preact": "^10.29.0",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^24.12.0",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.1"
+  }
+}
